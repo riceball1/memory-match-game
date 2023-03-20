@@ -7,7 +7,16 @@ export default class Preloader extends Phaser.Scene {
 
     // preload textures
     preload() {
+        // load sprites
+        this.load.image('burger', 'textures/burger.png')
+        this.load.image('croissant', 'textures/croissant.png')
+        this.load.image('donutSprinkles', 'textures/donutSprinkles.png')
+        this.load.image('sushiSalmon', 'textures/sushiSalmon.png')
+        this.load.image('sushiSalmon', 'textures/taco.png')
+        
         this.load.spritesheet('sokoban', 'textures/sokoban_tilesheet.png', { frameWidth: 64 })
+
+
     }
 
 
