@@ -4,7 +4,7 @@ import Phaser from 'phaser';
 const level = [
     [ 1, 0, 3 ],
     [ 2, 4, 1 ],
-    [ 3, 2, 0 ]
+    [ 3, 4, 2 ]
 ]
 
 export default class Game extends Phaser.Scene {
@@ -100,22 +100,21 @@ export default class Game extends Phaser.Scene {
         if (!box) return;
 
         const itemType = box.getData('itemType')
-        console.log(box, itemType)
+
         /** @type {Phaser.GameObjects.Sprite} */
         let item;
         switch (itemType) {
             case 0:
                 item = this.itemsGroup.get(box.x, box.y)
                 item.setTexture('burger')
-                item.setVisible(true)
                 break;
             case 1:
                 item = this.itemsGroup.get(box.x, box.y)
-                item.setTexture('donutSprinkle')
+                item.setTexture('donutSprinkles')
                 break;
             case 2:
                 item = this.itemsGroup.get(box.x, box.y)
-                item.setTexture('crossiant')
+                item.setTexture('croissant')
                 break;
             case 3:
                 item = this.itemsGroup.get(box.x, box.y)
@@ -175,6 +174,9 @@ export default class Game extends Phaser.Scene {
         if (spaceJustPressed && this.activeBox) {
             // open the box
             this.openBox(this.activeBox)
+
+            // this.activeBox.setFrame(10)
+            // this.activeBox = undefined
         }
 
 

@@ -7,24 +7,28 @@ export default class Preloader extends Phaser.Scene {
 
     // preload textures
     preload() {
+        
+        this.load.spritesheet('sokoban', 'textures/sokoban_tilesheet.png', { frameWidth: 64 })
+        
         // load sprites
         this.load.image('burger', 'textures/burger.png')
         this.load.image('croissant', 'textures/croissant.png')
         this.load.image('donutSprinkles', 'textures/donutSprinkles.png')
         this.load.image('sushiSalmon', 'textures/sushiSalmon.png')
-        this.load.image('sushiSalmon', 'textures/taco.png')
-        
-        this.load.spritesheet('sokoban', 'textures/sokoban_tilesheet.png', { frameWidth: 64 })
-
-
+        this.load.image('taco', 'textures/taco.png')
     }
-
 
     create() {
 
+        // create images to render the sprites
+        let burger = this.add.image(400, 500, 'burger')
+        let croissant = this.add.image(400, 500, 'croissant')
+        let donutSprinkles = this.add.image(400, 500, 'donutSprinkles')
+        let sushiSalmon = this.add.image(400, 500, 'sushiSalmon')
+        let taco = this.add.image(400, 500, 'taco')
+
+
         // create animations of the spirite
-
-
         // down
         this.anims.create({
             key: 'down-idle',
@@ -37,7 +41,6 @@ export default class Preloader extends Phaser.Scene {
             frameRate: 10,
             repeat: -1,
         })
-
 
         // Up
         this.anims.create({
