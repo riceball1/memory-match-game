@@ -66,18 +66,12 @@ Production files will be placed in the `dist` folder. Then upload those files to
     ├── public
     ├── src
     │   ├── HelloWorldScene.js
-    │   ├── main.js
+    │   ├── main.ts
 	├── index.html
     ├── package.json
 ```
 
-JavaScript files are intended for the `src` folder. `main.js` is the entry point referenced by `index.html`.
-
-Other than that there is no opinion on how you should structure your project.
-
-There is an example `HelloWorldScene.js` file that can be placed inside a `scenes` folder to organize by type or elsewhere to organize by function. For example, you can keep all files specific to the HelloWorld scene in a `hello-world` folder.
-
-It is all up to you!
+JavaScript files are intended for the `src` folder. `main.ts` is the entry point referenced by `index.html`.
 
 ## Static Assets
 
@@ -107,9 +101,9 @@ It does not aim to be opinionated.
 
 ## Dev Server Port
 
-You can change the dev server's port number by modifying the `vite.config.js` file. Look for the `server` section:
+You can change the dev server's port number by modifying the `vite.config.ts` file. Look for the `server` section:
 
-```js
+```ts
 {
 	// ...
 	server: { host: '0.0.0.0', port: 8000 },
