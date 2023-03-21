@@ -51,6 +51,15 @@ export default class Game extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
+
+    // add text about directions for playing
+    this.add
+      .text(width * 0.5, 80, "Use space bar to open boxes. Use direction keys to move character.", {
+        fontSize: "12px",
+      })
+      .setOrigin(0.5);
+
+
     this.player = this.physics.add
       .sprite(width * 0.5, height * 0.6, "sokoban")
       .setSize(40, 16)
