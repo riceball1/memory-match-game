@@ -7,6 +7,13 @@ const level = [
     [ 3, 4, 2 ]
 ]
 
+const TWEENS_RESET = {
+    y: "+=50",
+    alpha: 0,
+    scale: 0,
+    duration: 300,
+}
+
 export default class Game extends Phaser.Scene {
 
     /** @type {Phaser.Types.Input.Keyboard.CursorKeys} */
@@ -28,7 +35,8 @@ export default class Game extends Phaser.Scene {
     /** @types {{box: Phaser.Physics.Arcade.Sprite, item: Phaser.GameObjects.Sprite}}  */
     selectedBoxes = []
 
-
+    // keep track of how many matches 
+    matchesCount = 0
 
     constructor() {
         super('game')
@@ -156,6 +164,15 @@ export default class Game extends Phaser.Scene {
             scale: 1,
             duration: 500,
             onComplete: () => {
+
+                // handle when choosen type 0 that has no match
+                // stun the player for 2 seconds
+                if(itemType === 0) {
+                    this.handleStunPlayer()
+                    return
+                }
+
+
                 // check for a match when selectedBoxes.length === 2
                 if(this.selectedBoxes.length < 2) return
                 this.checkForMatch()
@@ -164,6 +181,40 @@ export default class Game extends Phaser.Scene {
 
         this.activeBox.setFrame(10)
         this.activeBox = undefined // make inactive
+
+    }
+
+    pausePlayer() {
+        this.player.active = false
+        this.player.setVelocity(0,0)
+    }
+
+    handleStunPlayer() {
+
+        const {box, item} = this.selectedBoxes.pop();
+
+        // change to tint of red
+        item.setTint(0xff0000)
+        box.setFrame(7)
+
+        // pauses player
+        this.pausePlayer()
+
+        this.time.delayedCall(1000, () => {
+            item.setTint(0xfffff)
+            box.setFrame(10)
+            box.setData('opened', false)
+
+            this.tweens.add({
+                targets: item,
+                ...TWEENS_RESET,
+                onComplete: () => {
+                    this.player.active = true;
+                }
+            })
+
+        })
+
 
     }
 
@@ -179,10 +230,7 @@ export default class Game extends Phaser.Scene {
             // no match, shrink both items
             this.tweens.add({
                 targets: [first.item, second.item],
-                y: "+=50",
-                alpha: 0,
-                scale: 0,
-                duration: 300,
+                ...TWEENS_RESET,
                 delay: 1000,
                 onComplete: () => {
                     first.box.setData('opened', false)
@@ -192,16 +240,38 @@ export default class Game extends Phaser.Scene {
             return;
         }
 
+        ++this.matchesCount
+
         // if there is a match
         this.time.delayedCall(1000, () => {
             first.box.setFrame(8)
             second.box.setFrame(8)
+
+            if(this.matchesCount >= 4) {
+                this.handleGameWon()
+            }
+            
         })
 
     }
 
 
+    handleGameWon() {
+        this.pausePlayer()
+
+        const {width, height} = this.scale;
+        this.add.text(width * 0.5, height *0.5, 'You win!', {
+            fontSize: '48px'
+        })
+        .setOrigin(0.5)
+    }
+
     updatePlayer() {
+
+        // pause player from moving
+        if(!this.player.active) return
+
+
         // determine veolocity
         const speed = 200;
 
