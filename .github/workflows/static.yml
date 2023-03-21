@@ -38,6 +38,9 @@ jobs:
         with:
           # Upload entire repository
           path: '.'
+          folder: dist
+          mime: |
+            .js  application/javascript
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
