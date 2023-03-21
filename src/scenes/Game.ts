@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import CountDownController from './CountDownController';
 
 
 const level = [
@@ -32,6 +33,9 @@ export default class Game extends Phaser.Scene {
     /** @type {Phaser.GameObjects.Group} */
     itemsGroup
 
+    /** @type {CountDownController} */
+    countdown
+
     /** @types {{box: Phaser.Physics.Arcade.Sprite, item: Phaser.GameObjects.Sprite}}  */
     selectedBoxes = []
 
@@ -59,6 +63,17 @@ export default class Game extends Phaser.Scene {
         this.createBoxes()
 
         this.itemsGroup = this.add.group()
+
+
+        // add countdown
+        const timerLabel = this.add.text(width * 0.5, 50, '45 seconds', {
+            fontSize: '45px'
+        } )
+        .setOrigin(0.5)
+
+        this.countdown = new CountDownController(this, timerLabel)
+        // bind it to the `this`
+        this.countdown.start(this.handleCountDownFinished.bind(this))
 
         this.physics.add.collider(this.player, this.boxGroup, this.handlePlayerBoxCollide, undefined, this)
 
@@ -89,6 +104,18 @@ export default class Game extends Phaser.Scene {
         }
 
     }
+
+
+    handleCountDownFinished() {
+        this.pausePlayer()
+        const {width, height} = this.scale;
+        this.add.text(width * 0.5, height *0.5, 'You lose!', {
+            fontSize: '48px',
+            color: 'red'
+        })
+        .setOrigin(0.5)
+    }
+
 
 
     /**
@@ -248,6 +275,7 @@ export default class Game extends Phaser.Scene {
             second.box.setFrame(8)
 
             if(this.matchesCount >= 4) {
+                this.countdown.stop()
                 this.handleGameWon()
             }
             
@@ -335,6 +363,8 @@ export default class Game extends Phaser.Scene {
             // @ts-ignore
             child.setDepth(child.y)
         })
+
+        this.countdown.update()
 
     }
 }
