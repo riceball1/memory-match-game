@@ -25,6 +25,9 @@ export default class Game extends Phaser.Scene {
     /** @type {Phaser.GameObjects.Group} */
     itemsGroup
 
+    /** @types {{box: Phaser.Physics.Arcade.Sprite, item: Phaser.GameObjects.Sprite}}  */
+    selectedBoxes = []
+
 
 
     constructor() {
@@ -86,8 +89,12 @@ export default class Game extends Phaser.Scene {
      * @param {Phaser.Physics.Arcade.Sprite} box
      */
     handlePlayerBoxCollide(player, box) {
+
+        // prevent re-opening the box 
+        if (box.getData('opened')) return;
         if (this.activeBox) return;
 
+        // update box to active
         this.activeBox = box;
         this.activeBox.setFrame(9)
     }
@@ -128,6 +135,16 @@ export default class Game extends Phaser.Scene {
 
         if (!item) return;
 
+        // identify when a box is opened
+        box.setData('opened', true)
+        
+        
+        item.setData('sorted', true)
+        item.setDepth(2000)
+
+        // keep track of the selected boxes
+        this.selectedBoxes.push({box, item})
+
         // scale items
         item.scale = 0;
         item.alpha = 0;
@@ -137,12 +154,52 @@ export default class Game extends Phaser.Scene {
             y: "-=50",
             alpha: 1,
             scale: 1,
-            duration: 500
+            duration: 500,
+            onComplete: () => {
+                // check for a match when selectedBoxes.length === 2
+                if(this.selectedBoxes.length < 2) return
+                this.checkForMatch()
+            }
         })
 
+        this.activeBox.setFrame(10)
         this.activeBox = undefined // make inactive
 
     }
+
+
+    checkForMatch() {
+
+        const second = this.selectedBoxes.pop();
+        const first = this.selectedBoxes.pop();
+
+        if(first.item.texture !== second.item.texture) {
+            first.box.setData('opened', false)
+            second.box.setData('opened', false)
+            // no match, shrink both items
+            this.tweens.add({
+                targets: [first.item, second.item],
+                y: "+=50",
+                alpha: 0,
+                scale: 0,
+                duration: 300,
+                delay: 1000,
+                onComplete: () => {
+                    first.box.setData('opened', false)
+                    second.box.setData('opened', false)
+                }
+            })
+            return;
+        }
+
+        // if there is a match
+        this.time.delayedCall(1000, () => {
+            first.box.setFrame(8)
+            second.box.setFrame(8)
+        })
+
+    }
+
 
     updatePlayer() {
         // determine veolocity
@@ -174,9 +231,6 @@ export default class Game extends Phaser.Scene {
         if (spaceJustPressed && this.activeBox) {
             // open the box
             this.openBox(this.activeBox)
-
-            // this.activeBox.setFrame(10)
-            // this.activeBox = undefined
         }
 
 
@@ -205,6 +259,9 @@ export default class Game extends Phaser.Scene {
             /** @types {Phaser.Physics.Arcade.Sprite} */
 
             const child = c;
+
+            if (child.getData('sorted')) return;
+
             // @ts-ignore
             child.setDepth(child.y)
         })
