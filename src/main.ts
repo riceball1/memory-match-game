@@ -1,20 +1,13 @@
-import Phaser from 'phaser'
+import Phaser from "phaser";
+import config from "./config";
 
-import Preloader from './scenes/Preloader'
-import Game from './scenes/Game'
+import Preloader from "./scenes/Preloader";
+import Game from "./scenes/Game";
 
-const config: Phaser.Types.Core.GameConfig = {
-	type: Phaser.AUTO,
-	parent: 'app',
-	width: 800,
-	height: 600,
-	physics: {
-		default: 'arcade',
-		arcade: {
-			gravity: { y: 0 },
-		},
-	},
-	scene: [Preloader, Game],
-}
+new Phaser.Game(
+  Object.assign(config, {
+    scene: [Preloader, Game],
+  })
+);
 
-export default new Phaser.Game(config)
+export default new Phaser.Game(config);

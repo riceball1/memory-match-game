@@ -1,29 +1,19 @@
 {
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
-		"strict": true,
-		"noImplicitAny": false,
-		"noEmit": true,
-		"allowJs": true,
-		"jsx": "preserve",
-		"importHelpers": true,
-		"moduleResolution": "node",
-		"experimentalDecorators": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
-		"baseUrl": "./src",
-		"paths": {
-		  "~/*": ["./*"]
-		},
-		"typeRoots": [
-			"node_modules/@types",
-			"node_module/phaser/types"
-		],
-		"types": [
-			"Phaser"
-		]
-	  },
-	  "include": ["src/**/*"]
-}
+	  "target": "ESNext",
+	  "lib": ["DOM", "DOM.Iterable", "ESNext"],
+	  "types": ["vite/client"],
+	  "allowJs": false,
+	  "skipLibCheck": false,
+	  "esModuleInterop": false,
+	  "allowSyntheticDefaultImports": true,
+	  "strict": true,
+	  "forceConsistentCasingInFileNames": true,
+	  "module": "ESNext",
+	  "moduleResolution": "Node",
+	  "resolveJsonModule": true,
+	  "isolatedModules": true,
+	  "noEmit": true
+	},
+	"include": ["./src/**/*"]
+  }
