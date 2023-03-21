@@ -2,6 +2,13 @@
 a simple phaser 3 memory match game -- [tutorial](https://www.youtube.com/watch?v=wnYP0CWFH_U&amp;list=PLNwtXgWIx3rgDXzjpcbY6OBj8biD8zOt5)
 
 
+## Technologies/Resources
+- typescript
+- phaser 3
+- vite.js
+- [kenney assets](https://www.kenney.nl/assets)
+- html canvas
+
 ## Screenshot of Game
 
 <img src="public/screenshot.png" />
